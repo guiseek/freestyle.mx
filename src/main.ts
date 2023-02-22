@@ -1,36 +1,56 @@
 import './style.scss'
 
+type Arrow<Event extends KeyboardEvent | TouchEvent> =
+  Event extends KeyboardEvent
+    ? Event['key']
+    : 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight'
+
+type Keys<Event extends KeyboardEvent | TouchEvent = KeyboardEvent> = Record<
+  Arrow<Event>,
+  number
+>
+
 const c = document.createElement('canvas'),
   ctx = c.getContext('2d') as CanvasRenderingContext2D,
   size = 50,
-  key: Record<string, number> = {
+  key: Keys = {
     ArrowUp: 0,
     ArrowDown: 0,
     ArrowLeft: 0,
     ArrowRight: 0,
   },
   perm: number[] = [],
-  LEVEL = 512
+  LEVEL = innerHeight > 800 ? 1024 : 256
 
 let t = 0,
   speed = 0,
   playing = true,
+  reloading = false,
   val
-
-c.width = window.innerWidth
-c.height = window.innerHeight
-document.body.appendChild(c)
 
 while (perm.length < LEVEL) {
   while (perm.includes((val = Math.floor(Math.random() * LEVEL))));
   perm.push(val)
 }
 
+const setSizes = (canvas: HTMLCanvasElement) => {
+  return () => {
+    canvas.width = innerWidth
+    canvas.height = innerHeight
+  }
+}
+
+const adjust = setSizes(c)
+
+document.body.appendChild(c)
+onresize = setSizes(c)
+adjust()
+
 const lerp = (a: number, b: number, t: number) =>
   a + ((b - a) * (1 - Math.cos(t * Math.PI))) / 2
 
 const noise = (x: number) => {
-  x = (x * 0.006) % LEVEL
+  x = (x * 0.005) % LEVEL
   return lerp(perm[Math.floor(x)], perm[Math.ceil(x)], x - Math.floor(x))
 }
 
@@ -54,7 +74,7 @@ class Player {
     let grounded = 0
 
     if (p1 - size > this.y) {
-      this.ySpeed += 0.1
+      this.ySpeed += 0.08
     } else {
       this.ySpeed -= this.y - (p1 - size)
       this.y = p1 - size
@@ -67,9 +87,13 @@ class Player {
       this.rSpeed = 3
       key.ArrowUp = 1
       this.x -= speed * 5
-      setTimeout(() => {
-        location.reload()
-      }, 3000)
+      if (!reloading) {
+        setTimeout(() => {
+          reloading = true
+          console.log('reload')
+          location.reload()
+        }, 3000)
+      }
     }
 
     const angle = Math.atan2(p2 - size - this.y, this.x + 3 - this.x)
@@ -77,11 +101,11 @@ class Player {
     this.y += this.ySpeed
 
     if (grounded && playing) {
-      this.rot -= (this.rot - angle) * 0.5
+      this.rot -= (this.rot - angle) * 0.9
       this.rSpeed = this.rSpeed - (angle - this.rot)
     }
 
-    this.rSpeed += (key.ArrowLeft - key.ArrowRight) * 0.04
+    this.rSpeed += (key.ArrowLeft - key.ArrowRight) * 0.02
     this.rot -= this.rSpeed * 0.1
 
     if (this.rot > Math.PI) this.rot = -Math.PI
@@ -119,6 +143,46 @@ function loop() {
 
   player.draw()
   requestAnimationFrame(loop)
+}
+
+const leftTop = document.querySelector<HTMLElement>('main #left .top')
+const leftBottom = document.querySelector<HTMLElement>('main #left .bottom')
+const rightTop = document.querySelector<HTMLElement>('main #right .top')
+const rightBottom = document.querySelector<HTMLElement>('main #right .bottom')
+
+if (leftTop && leftBottom && rightTop && rightBottom) {
+  leftTop.ontouchstart = () => {
+    const direction = key as Keys<TouchEvent>
+    direction.ArrowLeft = 1
+  }
+  leftTop.ontouchend = () => {
+    const direction = key as Keys<TouchEvent>
+    direction.ArrowLeft = 0
+  }
+  leftBottom.ontouchstart = () => {
+    const direction = key as Keys<TouchEvent>
+    direction.ArrowDown = 1
+  }
+  leftBottom.ontouchend = () => {
+    const direction = key as Keys<TouchEvent>
+    direction.ArrowDown = 0
+  }
+  rightTop.ontouchstart = () => {
+    const direction = key as Keys<TouchEvent>
+    direction.ArrowRight = 1
+  }
+  rightTop.ontouchend = () => {
+    const direction = key as Keys<TouchEvent>
+    direction.ArrowRight = 0
+  }
+  rightBottom.ontouchstart = () => {
+    const direction = key as Keys<TouchEvent>
+    direction.ArrowUp = 1
+  }
+  rightBottom.ontouchend = () => {
+    const direction = key as Keys<TouchEvent>
+    direction.ArrowUp = 0
+  }
 }
 
 onkeydown = (d) => (key[d.key] = 1)

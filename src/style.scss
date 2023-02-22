@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
   height: 100%;
 }
 body {
@@ -6,4 +7,28 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+main {
+  .control {
+    flex: 1;
+    background-color: transparent;
+    border: 0;
+  }
+  #left,
+  #right {
+    top: 0;
+    bottom: 0;
+    position: fixed;
+    content: ' ';
+    width: 50vw;
+    display: flex;
+    flex-direction: column;
+  }
+  #left {
+    left: 0;
+  }
+  #right {
+    right: 0;
+  }
 }
