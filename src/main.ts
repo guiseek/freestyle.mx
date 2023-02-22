@@ -44,7 +44,7 @@ class Player {
   img = new Image()
 
   constructor() {
-    this.img.src = '/viniktm.png'
+    this.img.src = 'viniktm.png'
   }
 
   draw() {
