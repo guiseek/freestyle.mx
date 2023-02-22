@@ -10,9 +10,11 @@ type Keys<Event extends KeyboardEvent | TouchEvent = KeyboardEvent> = Record<
   number
 >
 
+const isSmallScreen = () => innerHeight < 800
+
 const c = document.createElement('canvas'),
   ctx = c.getContext('2d') as CanvasRenderingContext2D,
-  size = 50,
+  size = isSmallScreen() ? 25 : 50,
   key: Keys = {
     ArrowUp: 0,
     ArrowDown: 0,
@@ -20,7 +22,7 @@ const c = document.createElement('canvas'),
     ArrowRight: 0,
   },
   perm: number[] = [],
-  LEVEL = innerHeight > 800 ? 1024 : 256
+  LEVEL = isSmallScreen() ? 512 : 1024
 
 let t = 0,
   speed = 0,
@@ -88,11 +90,14 @@ class Player {
       key.ArrowUp = 1
       this.x -= speed * 5
       if (!reloading) {
-        setTimeout(() => {
-          reloading = true
-          console.log('reload')
-          location.reload()
-        }, 3000)
+        setTimeout(
+          () => {
+            reloading = true
+            console.log('reload')
+            location.reload()
+          },
+          isSmallScreen() ? 1500 : 3000
+        )
       }
     }
 
@@ -114,7 +119,7 @@ class Player {
     ctx.save()
     ctx.translate(this.x, this.y)
     ctx.rotate(this.rot)
-    ctx.drawImage(this.img, -size, -size, 100, 100)
+    ctx.drawImage(this.img, -size, -size, size * 2, size * 2)
 
     ctx.restore()
   }
