@@ -1,0 +1,1 @@
+html,body{height:100%}body{margin:0;display:flex;align-items:center;justify-content:center}main .control{flex:1;background-color:transparent;border:0}main #left,main #right{top:0;bottom:0;position:fixed;content:" ";width:50vw;display:flex;flex-direction:column}main #left{left:0}main #right{right:0}
