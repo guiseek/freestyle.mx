@@ -26,6 +26,10 @@ main {
       border: 4px solid #212121;
     }
 
+    @media (min-width: 1280px) {
+      display: none;
+    }
+
     svg {
       color: white;
       fill: white;
@@ -67,12 +71,4 @@ canvas {
 }
 button {
   z-index: 10000;
-}
-
-canvas:not(:fullscreen) {
-  @media (min-width: 1920px) {
-    .control {
-      display: none;
-    }
-  }
 }

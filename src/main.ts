@@ -15,6 +15,7 @@ let t = 0,
   speed = 0,
   playing = true,
   reloading = false,
+  fullscreen = false,
   val
 
 while (perm.length < LEVEL) {
@@ -166,16 +167,17 @@ if (backFlipButton && frontFlipButton && runButton && backButton) {
   backButton.ontouchend = () => controlState.setState({ArrowDown: 0})
 }
 
-c.ondblclick = () => {
-  if (document.fullscreenEnabled) {
-    if (document.fullscreen) {
-      document.exitFullscreen()
-    } else {
-      c.requestFullscreen({
-        navigationUI: 'hide',
-      })
-    }
+document.body.ondblclick = () => {
+  console.log('dbl');
+  if (fullscreen) {
+    document.exitFullscreen()
+  } else {
+    c.requestFullscreen({
+      navigationUI: 'hide',
+    })
   }
+  fullscreen = !fullscreen
+  
 }
 
 onkeydown = (ev) => controlState.setState({[ev.key]: 1})
