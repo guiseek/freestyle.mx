@@ -22,7 +22,8 @@ const c = document.createElement('canvas'),
     ArrowRight: 0,
   },
   perm: number[] = [],
-  LEVEL = isSmallScreen() ? 512 : 1024
+  LEVEL = isSmallScreen() ? 512 : 1024,
+  GRAVITY = 0.2
 
 let t = 0,
   speed = 0,
@@ -66,7 +67,7 @@ class Player {
   img = new Image()
 
   constructor() {
-    this.img.src = 'viniktm.png'
+    this.img.src = 'rider.svg'
   }
 
   draw() {
@@ -76,7 +77,7 @@ class Player {
     let grounded = 0
 
     if (p1 - size > this.y) {
-      this.ySpeed += 0.08
+      this.ySpeed += GRAVITY
     } else {
       this.ySpeed -= this.y - (p1 - size)
       this.y = p1 - size
@@ -88,7 +89,7 @@ class Player {
       playing = false
       this.rSpeed = 3
       key.ArrowUp = 1
-      this.x -= speed * 5
+      this.x -= speed
       if (!reloading) {
         setTimeout(
           () => {
