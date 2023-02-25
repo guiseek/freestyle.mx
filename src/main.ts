@@ -1,29 +1,15 @@
+import {controlState} from './data'
 import './style.scss'
-
-type Arrow<Event extends KeyboardEvent | TouchEvent> =
-  Event extends KeyboardEvent
-    ? Event['key']
-    : 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight'
-
-type Keys<Event extends KeyboardEvent | TouchEvent = KeyboardEvent> = Record<
-  Arrow<Event>,
-  number
->
 
 const isSmallScreen = () => innerHeight < 800
 
 const c = document.createElement('canvas'),
   ctx = c.getContext('2d') as CanvasRenderingContext2D,
-  size = isSmallScreen() ? 25 : 50,
-  key: Keys = {
-    ArrowUp: 0,
-    ArrowDown: 0,
-    ArrowLeft: 0,
-    ArrowRight: 0,
-  },
+  size = isSmallScreen() ? 30 : 60,
   perm: number[] = [],
   LEVEL = isSmallScreen() ? 512 : 1024,
-  GRAVITY = 0.2
+  GRAVITY = 0.2,
+  VELOCITY = 10
 
 let t = 0,
   speed = 0,
@@ -78,7 +64,9 @@ class Player {
 
     if (p1 - size > this.y) {
       this.ySpeed += GRAVITY
+      // console.log('VOANDO')
     } else {
+      // console.log('CHAO')
       this.ySpeed -= this.y - (p1 - size)
       this.y = p1 - size
 
@@ -88,17 +76,15 @@ class Player {
     if (!playing || (grounded && Math.abs(this.rot) > Math.PI * 0.5)) {
       playing = false
       this.rSpeed = 3
-      key.ArrowUp = 1
+      // key.ArrowUp = 1
+      controlState.setState({ArrowUp: 1})
       this.x -= speed
       if (!reloading) {
-        setTimeout(
-          () => {
-            reloading = true
-            console.log('reload')
-            location.reload()
-          },
-          isSmallScreen() ? 1500 : 3000
-        )
+        setTimeout(() => {
+          reloading = true
+          console.log('reload')
+          location.reload()
+        }, 1000)
       }
     }
 
@@ -111,7 +97,9 @@ class Player {
       this.rSpeed = this.rSpeed - (angle - this.rot)
     }
 
-    this.rSpeed += (key.ArrowLeft - key.ArrowRight) * 0.02
+    this.rSpeed +=
+      (controlState.pick('ArrowLeft') - controlState.pick('ArrowRight')) * 0.02
+
     this.rot -= this.rSpeed * 0.1
 
     if (this.rot > Math.PI) this.rot = -Math.PI
@@ -129,12 +117,14 @@ class Player {
 const player = new Player()
 
 function loop() {
-  speed -= (speed - (key.ArrowUp - key.ArrowDown)) * 0.1
-  t += 10 * speed
+  speed -=
+    (speed - (controlState.pick('ArrowUp') - controlState.pick('ArrowDown'))) *
+    0.1
+  t += VELOCITY * speed
   ctx.fillStyle = '#8ee5ff'
   ctx.fillRect(0, 0, c.width, c.height)
 
-  ctx.fillStyle = '#f97f2d'
+  ctx.fillStyle = '#c55e1a'
 
   ctx.beginPath()
   ctx.moveTo(0, c.height)
@@ -151,47 +141,61 @@ function loop() {
   requestAnimationFrame(loop)
 }
 
-const leftTop = document.querySelector<HTMLElement>('main #left .top')
-const leftBottom = document.querySelector<HTMLElement>('main #left .bottom')
-const rightTop = document.querySelector<HTMLElement>('main #right .top')
-const rightBottom = document.querySelector<HTMLElement>('main #right .bottom')
+const backFlipButton = document.querySelector<HTMLButtonElement>('#back-flip')
+const frontFlipButton = document.querySelector<HTMLButtonElement>('#front-flip')
+const runButton = document.querySelector<HTMLButtonElement>('#run')
+const backButton = document.querySelector<HTMLButtonElement>('#back')
 
-if (leftTop && leftBottom && rightTop && rightBottom) {
-  leftTop.ontouchstart = () => {
-    const direction = key as Keys<TouchEvent>
-    direction.ArrowLeft = 1
-  }
-  leftTop.ontouchend = () => {
-    const direction = key as Keys<TouchEvent>
-    direction.ArrowLeft = 0
-  }
-  leftBottom.ontouchstart = () => {
-    const direction = key as Keys<TouchEvent>
-    direction.ArrowDown = 1
-  }
-  leftBottom.ontouchend = () => {
-    const direction = key as Keys<TouchEvent>
-    direction.ArrowDown = 0
-  }
-  rightTop.ontouchstart = () => {
-    const direction = key as Keys<TouchEvent>
-    direction.ArrowRight = 1
-  }
-  rightTop.ontouchend = () => {
-    const direction = key as Keys<TouchEvent>
-    direction.ArrowRight = 0
-  }
-  rightBottom.ontouchstart = () => {
-    const direction = key as Keys<TouchEvent>
-    direction.ArrowUp = 1
-  }
-  rightBottom.ontouchend = () => {
-    const direction = key as Keys<TouchEvent>
-    direction.ArrowUp = 0
-  }
+if (backFlipButton && frontFlipButton && runButton && backButton) {
+  backFlipButton.onmousedown = () => controlState.setState({ArrowLeft: 1})
+  backFlipButton.onmouseup = () => controlState.setState({ArrowLeft: 0})
+
+  frontFlipButton.onmousedown = () => controlState.setState({ArrowRight: 1})
+  frontFlipButton.onmouseup = () => controlState.setState({ArrowRight: 0})
+
+  runButton.onmousedown = () => controlState.setState({ArrowUp: 1})
+  runButton.onmouseup = () => controlState.setState({ArrowUp: 0})
+
+  backButton.onmousedown = () => controlState.setState({ArrowDown: 1})
+  backButton.onmouseup = () => controlState.setState({ArrowDown: 0})
 }
 
-onkeydown = (d) => (key[d.key] = 1)
-onkeyup = (d) => (key[d.key] = 0)
+// const leftTop = document.querySelector<HTMLElement>('main #left .top')
+// const leftBottom = document.querySelector<HTMLElement>('main #left .bottom')
+// const rightTop = document.querySelector<HTMLElement>('main #right .top')
+// const rightBottom = document.querySelector<HTMLElement>('main #right .bottom')
+
+// if (leftTop && leftBottom && rightTop && rightBottom) {
+//   leftTop.ontouchstart = () => {
+//     controlState.setState({ArrowLeft: 1})
+//   }
+//   leftTop.ontouchend = () => {
+//     controlState.setState({ArrowLeft: 0})
+//   }
+//   leftBottom.ontouchstart = () => {
+//     controlState.setState({ArrowDown: 1})
+//   }
+//   leftBottom.ontouchend = () => {
+//     controlState.setState({ArrowDown: 0})
+//   }
+//   rightTop.ontouchstart = () => {
+//     controlState.setState({ArrowRight: 1})
+//   }
+//   rightTop.ontouchend = () => {
+//     controlState.setState({ArrowRight: 0})
+//   }
+//   rightBottom.ontouchstart = () => {
+//     controlState.setState({ArrowUp: 1})
+//   }
+//   rightBottom.ontouchend = () => {
+//     controlState.setState({ArrowUp: 0})
+//   }
+// }
+
+onkeydown = (ev) => controlState.setState({[ev.key]: 1})
+onkeyup = (ev) => controlState.setState({[ev.key]: 0})
+
+// onkeydown = (d) => (key[d.key] = 1)
+// onkeyup = (d) => (key[d.key] = 0)
 
 loop()
