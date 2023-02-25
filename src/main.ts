@@ -172,7 +172,7 @@ document.body.ondblclick = () => {
   if (fullscreen) {
     document.exitFullscreen()
   } else {
-    c.requestFullscreen({
+    document.documentElement.requestFullscreen({
       navigationUI: 'hide',
     })
   }
