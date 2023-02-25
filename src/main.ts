@@ -126,7 +126,7 @@ function loop() {
    */
   ctx.fillStyle = '#8ee5ff'
   ctx.fillRect(0, 0, c.width, c.height)
-  
+
   /**
    * Cor da terra
    */
@@ -166,42 +166,19 @@ if (backFlipButton && frontFlipButton && runButton && backButton) {
   backButton.ontouchend = () => controlState.setState({ArrowDown: 0})
 }
 
-// const leftTop = document.querySelector<HTMLElement>('main #left .top')
-// const leftBottom = document.querySelector<HTMLElement>('main #left .bottom')
-// const rightTop = document.querySelector<HTMLElement>('main #right .top')
-// const rightBottom = document.querySelector<HTMLElement>('main #right .bottom')
-
-// if (leftTop && leftBottom && rightTop && rightBottom) {
-//   leftTop.ontouchstart = () => {
-//     controlState.setState({ArrowLeft: 1})
-//   }
-//   leftTop.ontouchend = () => {
-//     controlState.setState({ArrowLeft: 0})
-//   }
-//   leftBottom.ontouchstart = () => {
-//     controlState.setState({ArrowDown: 1})
-//   }
-//   leftBottom.ontouchend = () => {
-//     controlState.setState({ArrowDown: 0})
-//   }
-//   rightTop.ontouchstart = () => {
-//     controlState.setState({ArrowRight: 1})
-//   }
-//   rightTop.ontouchend = () => {
-//     controlState.setState({ArrowRight: 0})
-//   }
-//   rightBottom.ontouchstart = () => {
-//     controlState.setState({ArrowUp: 1})
-//   }
-//   rightBottom.ontouchend = () => {
-//     controlState.setState({ArrowUp: 0})
-//   }
-// }
+c.ondblclick = () => {
+  if (document.fullscreenEnabled) {
+    if (document.fullscreen) {
+      document.exitFullscreen()
+    } else {
+      c.requestFullscreen({
+        navigationUI: 'hide',
+      })
+    }
+  }
+}
 
 onkeydown = (ev) => controlState.setState({[ev.key]: 1})
 onkeyup = (ev) => controlState.setState({[ev.key]: 0})
-
-// onkeydown = (d) => (key[d.key] = 1)
-// onkeyup = (d) => (key[d.key] = 0)
 
 loop()
