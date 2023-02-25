@@ -147,17 +147,17 @@ const runButton = document.querySelector<HTMLButtonElement>('#run')
 const backButton = document.querySelector<HTMLButtonElement>('#back')
 
 if (backFlipButton && frontFlipButton && runButton && backButton) {
-  backFlipButton.onmousedown = () => controlState.setState({ArrowLeft: 1})
-  backFlipButton.onmouseup = () => controlState.setState({ArrowLeft: 0})
+  backFlipButton.ontouchstart = () => controlState.setState({ArrowLeft: 1})
+  backFlipButton.ontouchend = () => controlState.setState({ArrowLeft: 0})
 
-  frontFlipButton.onmousedown = () => controlState.setState({ArrowRight: 1})
-  frontFlipButton.onmouseup = () => controlState.setState({ArrowRight: 0})
+  frontFlipButton.ontouchstart = () => controlState.setState({ArrowRight: 1})
+  frontFlipButton.ontouchend = () => controlState.setState({ArrowRight: 0})
 
-  runButton.onmousedown = () => controlState.setState({ArrowUp: 1})
-  runButton.onmouseup = () => controlState.setState({ArrowUp: 0})
+  runButton.ontouchstart = () => controlState.setState({ArrowUp: 1})
+  runButton.ontouchend = () => controlState.setState({ArrowUp: 0})
 
-  backButton.onmousedown = () => controlState.setState({ArrowDown: 1})
-  backButton.onmouseup = () => controlState.setState({ArrowDown: 0})
+  backButton.ontouchstart = () => controlState.setState({ArrowDown: 1})
+  backButton.ontouchend = () => controlState.setState({ArrowDown: 0})
 }
 
 // const leftTop = document.querySelector<HTMLElement>('main #left .top')
