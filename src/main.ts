@@ -121,9 +121,15 @@ function loop() {
     (speed - (controlState.pick('ArrowUp') - controlState.pick('ArrowDown'))) *
     0.1
   t += VELOCITY * speed
+  /**
+   * Cor do céu
+   */
   ctx.fillStyle = '#8ee5ff'
   ctx.fillRect(0, 0, c.width, c.height)
-
+  
+  /**
+   * Cor da terra
+   */
   ctx.fillStyle = '#c55e1a'
 
   ctx.beginPath()
