@@ -19,7 +19,7 @@ main {
     background-color: #212121;
     border: 4px solid #414141;
     color: #f9f9f9;
-    
+    z-index: 1000;
     &:active,
     &:focus-visible {
       background-color: #414141;
@@ -41,11 +41,7 @@ main {
       top: 0;
     }
   }
-  @media (min-width: 1920px) {
-    .control {
-      display: none;
-    }
-  }
+  
   #left,
   #right {
     bottom: 10px;
@@ -59,5 +55,13 @@ main {
   }
   #right {
     right: 20px;
+  }
+}
+
+html:not(:fullscreen) {
+  @media (min-width: 1920px) {
+    .control {
+      display: none;
+    }
   }
 }
