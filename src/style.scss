@@ -30,7 +30,7 @@ main {
       color: white;
       fill: white;
     }
-    
+
     &::after {
       content: ' ';
       left: 0;
@@ -41,7 +41,7 @@ main {
       top: 0;
     }
   }
-  
+
   #left,
   #right {
     bottom: 10px;
@@ -58,7 +58,14 @@ main {
   }
 }
 
-html:not(:fullscreen) {
+canvas {
+  z-index: -1;
+}
+button {
+  z-index: 10000;
+}
+
+canvas:not(:fullscreen) {
   @media (min-width: 1920px) {
     .control {
       display: none;
