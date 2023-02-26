@@ -3,6 +3,7 @@ import {control, store} from '../../data'
 import {noise} from '../../utilities'
 
 export class Player {
+  reloading = false
   x = CANVAS.width / 2
   ySpeed = 0
   rSpeed = 0
@@ -42,14 +43,16 @@ export class Player {
       store.setState({playing: false})
       control.setState({ArrowUp: 1})
       this.x -= speed
-      
-      // if (!reloading) {
-      //   setTimeout(() => {
-      //     reloading = true
-      //     console.log('reload')
-      //     location.reload()
-      //   }, 1000)
-      // }
+
+      /**
+       * @TODO reload is wrong :/ improve this!
+       */
+      if (!this.reloading) {
+        setTimeout(() => {
+          this.reloading = true
+          location.reload()
+        }, 1000)
+      }
     }
 
     const angle = Math.atan2(p2 - SIZE - this.y, this.x + 3 - this.x)
