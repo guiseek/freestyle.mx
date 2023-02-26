@@ -1,9 +1,11 @@
 import {CANVAS, CONTEXT, VELOCITY} from '../../constants'
+import {noise, drawSky} from '../../utilities'
 import {control, store} from '../../data'
 import {Player} from '../entities/player'
-import {noise} from '../../utilities'
 
 export class GameLoop {
+  sky = drawSky()
+
   constructor(private player: Player) {}
 
   execute = () => {
@@ -20,13 +22,14 @@ export class GameLoop {
     /**
      * Cor do céu
      */
-    CONTEXT.fillStyle = '#8ee5ff'
-    CONTEXT.fillRect(0, 0, CANVAS.width, CANVAS.height)
+    // CONTEXT.fillStyle = '#8ee5ff'
+    // CONTEXT.fillRect(0, 0, CANVAS.width, CANVAS.height)
+    CONTEXT.drawImage(this.sky, 0, 0)
 
     /**
      * Cor da terra
      */
-    CONTEXT.fillStyle = '#c55e1a'
+    CONTEXT.fillStyle = '#764015'
 
     CONTEXT.beginPath()
     CONTEXT.moveTo(0, CANVAS.height)
