@@ -17,6 +17,14 @@ export class Player {
     this.img.src = 'rider.svg'
   }
 
+  restart() {
+    store.setState({playing: true, speed: 0, t: 0})
+    this.x = CANVAS.width / 2
+    this.rSpeed = 0
+    this.y = 0
+    this.reloading = false
+  }
+
   draw() {
     const t = store.pick('t')
     const speed = store.pick('speed')
@@ -44,14 +52,9 @@ export class Player {
       control.setState({ArrowUp: 1})
       this.x -= speed
 
-      /**
-       * @TODO reload is wrong :/ improve this!
-       */
       if (!this.reloading) {
-        setTimeout(() => {
-          this.reloading = true
-          location.reload()
-        }, 1000)
+        setTimeout(() => this.restart(), 1000)
+        this.reloading = true
       }
     }
 
