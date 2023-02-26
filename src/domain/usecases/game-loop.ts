@@ -24,7 +24,7 @@ export class GameLoop {
      */
     // CONTEXT.fillStyle = '#8ee5ff'
     // CONTEXT.fillRect(0, 0, CANVAS.width, CANVAS.height)
-    CONTEXT.drawImage(this.sky, 0, 0)
+    CONTEXT.drawImage(this.sky, 0, 0, CANVAS.width, CANVAS.height)
 
     /**
      * Cor da terra
