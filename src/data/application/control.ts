@@ -1,6 +1,6 @@
 import {useState, freeze} from '../../core'
 
-export const controlState = useState(
+export const control = useState(
   freeze({
     ArrowUp: 0,
     ArrowDown: 0,
