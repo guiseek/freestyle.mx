@@ -22,8 +22,8 @@ export class Player {
     const speed = store.pick('speed')
     const playing = store.pick('playing')
 
-    const p1 = CANVAS.height - noise(t + this.x) * 0.25
-    const p2 = CANVAS.height - noise(t + 5 + this.x) * 0.25
+    const p1 = CANVAS.height - noise(t + this.x) * 0.3
+    const p2 = CANVAS.height - noise(t + 5 + this.x) * 0.3
 
     let grounded = 0
 

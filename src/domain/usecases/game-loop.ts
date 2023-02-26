@@ -32,7 +32,7 @@ export class GameLoop {
     CONTEXT.moveTo(0, CANVAS.height)
 
     for (let i = 0; i < CANVAS.width; i++) {
-      CONTEXT.lineTo(i, CANVAS.height - noise(t + i) * 0.25)
+      CONTEXT.lineTo(i, CANVAS.height - noise(t + i) * 0.3)
     }
 
     CONTEXT.lineTo(CANVAS.width, CANVAS.height)
