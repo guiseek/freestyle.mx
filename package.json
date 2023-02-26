@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build --outDir docs --base mx-vini",
+    "build": "tsc && vite build --base mx-vini",
     "preview": "vite preview"
   },
   "devDependencies": {
