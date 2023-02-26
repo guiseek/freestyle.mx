@@ -1,6 +1,6 @@
 import {CANVAS} from '../../constants'
 
-const starSizes = [3, 1, 2, 2]
+const starSizes = [2, 1, 1.5, 0.8]
 const starColors = ['#f1f1f1', '#FFDCD4', '#7AEFFF', '#FFF385']
 
 export function drawSky() {
