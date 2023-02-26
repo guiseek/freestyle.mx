@@ -1,7 +1,8 @@
 import {BehaviorSubject, distinctUntilChanged, map} from 'rxjs'
+import {freeze} from './freeze'
 
 export const useState = <T extends object>(initialState: T) => {
-  const _state = new BehaviorSubject<T>(initialState)
+  const _state = new BehaviorSubject(freeze(initialState))
   const state$ = _state.asObservable()
 
   const pick = <K extends keyof T>(key: K) => _state.value[key]

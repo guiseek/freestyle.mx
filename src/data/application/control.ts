@@ -1,10 +1,8 @@
-import {useState, freeze} from '../../core'
+import {useState} from '../../core'
 
-export const control = useState(
-  freeze({
-    ArrowUp: 0,
-    ArrowDown: 0,
-    ArrowLeft: 0,
-    ArrowRight: 0,
-  })
-)
+export const control = useState({
+  ArrowUp: 0,
+  ArrowDown: 0,
+  ArrowLeft: 0,
+  ArrowRight: 0,
+})
