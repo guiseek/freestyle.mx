@@ -22,6 +22,7 @@ export class Player {
     this.x = CANVAS.width / 2
     this.rSpeed = 0
     this.y = 0
+    this.rot = 0
     this.reloading = false
   }
 
