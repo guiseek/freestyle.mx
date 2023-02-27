@@ -6,9 +6,12 @@ import {noise} from '../../utilities'
 
 const PLAYER_FRAMES: PlayerFrames = [
   ['./player/waiting.png', 'waiting', 0],
+  ['./player/landing.png', 'landing', 0],
   ['./player/running.png', 'running', 0],
   ['./player/back-flip.png', 'backFlip', 0],
   ['./player/front-flip.png', 'frontFlip', 0],
+  ['./player/super-man.png', 'superMan', 0],
+  ['./player/hart-attack.png', 'hartAttack', 0],
 ]
 
 export class Player {
@@ -27,20 +30,25 @@ export class Player {
   img = new Image()
 
   frame: PlayerKeyFrame = 'waiting'
+  skipLoop = false
+  skipTimes = 0
 
   constructor() {
     this.img.src = 'rider.svg'
 
     Promise.allSettled(loadFrames(frame, PLAYER_FRAMES)).then(() => {
-      console.log(frame.state())
-
       const gameLoop = new GameLoop(this)
       gameLoop.execute()
-      console.log(frame.state())
     })
   }
 
   restart() {
+    control.setState({
+      ArrowDown: 0,
+      ArrowLeft: 0,
+      ArrowRight: 0,
+      ArrowUp: 0,
+    })
     store.setState({playing: true, speed: 0, t: 0})
     this.reloading = false
     this.position = {
@@ -48,7 +56,6 @@ export class Player {
       y: 0,
       r: 0,
     }
-
     this.speed = {
       y: 0,
       r: 0,
@@ -63,12 +70,15 @@ export class Player {
     const p1 = CANVAS.height - noise(t + this.position.x) * 0.3
     const p2 = CANVAS.height - noise(t + 5 + this.position.x) * 0.3
 
+    let state: PlayerKeyFrame
     let grounded = 0
 
     if (p1 - SIZE > this.position.y) {
       this.speed.y += GRAVITY
       // console.log('VOANDO')
     } else {
+      // this.skipLoop = true
+      this.skipTimes = 3
       // console.log('CHAO')
       this.speed.y -= this.position.y - (p1 - SIZE)
       this.position.y = p1 - SIZE
@@ -112,17 +122,19 @@ export class Player {
     CONTEXT.translate(this.position.x, this.position.y)
     CONTEXT.rotate(this.position.r)
 
-    let state: PlayerKeyFrame
-
-    if (control.pick('ArrowLeft')) state = 'backFlip'
+    if (control.pick('s')) state = 'superMan'
+    else if (control.pick('h')) state = 'hartAttack'
+    else if (control.pick('ArrowLeft')) state = 'backFlip'
     else if (control.pick('ArrowRight')) state = 'frontFlip'
     else if (control.pick('ArrowUp')) state = 'running'
     else state = 'waiting'
+    if (this.skipTimes > 0) {
+      state = 'landing'
+      this.skipTimes--
+    }
 
-    // const state = control.pick('ArrowUp') ? 'running' : 'waiting'
     const [currentFrame] = frame.pick(state)
     CONTEXT.drawImage(currentFrame, -SIZE, -SIZE, SIZE * 2, SIZE * 2)
-    // CONTEXT.drawImage(this.img, -SIZE, -SIZE, SIZE * 2, SIZE * 2)
 
     CONTEXT.restore()
   }

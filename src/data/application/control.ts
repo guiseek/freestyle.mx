@@ -5,4 +5,6 @@ export const control = useState({
   ArrowDown: 0,
   ArrowLeft: 0,
   ArrowRight: 0,
+  s: 0,
+  h: 0
 })

@@ -6,10 +6,5 @@ export const initialize = async () => {
   document.body.appendChild(CANVAS)
   onresize = setCanvasSize
   setCanvasSize()
-
-  const player = new Player()
-  console.log(player);
-  
-
-  return player
+  return new Player()
 }

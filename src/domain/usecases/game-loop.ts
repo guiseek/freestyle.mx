@@ -1,10 +1,10 @@
 import {CANVAS, CONTEXT, VELOCITY} from '../../constants'
-import {noise, drawSky} from '../../utilities'
+import {noise, createSky} from '../../utilities'
 import {control, store} from '../../data'
 import {Player} from '../entities/player'
 
 export class GameLoop {
-  sky = drawSky()
+  sky = createSky()
 
   constructor(private player: Player) {}
 

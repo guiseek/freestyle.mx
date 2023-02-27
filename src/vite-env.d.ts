@@ -1,8 +1,18 @@
 /// <reference types="vite/client" />
 
-type PlayerKeyFrame = 'waiting' | 'running' | 'backFlip' | 'frontFlip'
+type PlayerKeyFrame =
+  | 'waiting'
+  | 'landing'
+  | 'running'
+  | 'backFlip'
+  | 'frontFlip'
+  | 'superMan'
+  | 'hartAttack'
 
-type PlayerFrame = Record<PlayerKeyFrame, OffscreenCanvas[]>
+type PlayerFrame = Record<
+  PlayerKeyFrame,
+  (HTMLCanvasElement | OffscreenCanvas)[]
+>
 
 type PlayerFrames = [string, PlayerKeyFrame, number][]
 
@@ -33,3 +43,6 @@ type OffscreenRenderingContext2 = OffscreenRenderingContext & {
     dh: number
   ): void
 }
+
+type Platform = 'apple' | 'pc'
+type TransformMap = Record<string, string>

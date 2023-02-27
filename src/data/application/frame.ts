@@ -4,5 +4,8 @@ export const frame = useState<PlayerFrame>({
   waiting: [],
   running: [],
   backFlip: [],
-  frontFlip: []
+  frontFlip: [],
+  superMan: [],
+  hartAttack: [],
+  landing: []
 })

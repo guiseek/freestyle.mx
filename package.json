@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build --base mx-vini",
-    "preview": "vite preview"
+    "start": "vite preview"
   },
   "devDependencies": {
     "sass": "^1.58.3",
