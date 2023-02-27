@@ -7,6 +7,8 @@ import {noise} from '../../utilities'
 const PLAYER_FRAMES: PlayerFrames = [
   ['./player/waiting.png', 'waiting', 0],
   ['./player/running.png', 'running', 0],
+  ['./player/back-flip.png', 'backFlip', 0],
+  ['./player/front-flip.png', 'frontFlip', 0],
 ]
 
 export class Player {
@@ -30,6 +32,8 @@ export class Player {
     this.img.src = 'rider.svg'
 
     Promise.allSettled(loadFrames(frame, PLAYER_FRAMES)).then(() => {
+      console.log(frame.state())
+
       const gameLoop = new GameLoop(this)
       gameLoop.execute()
       console.log(frame.state())
@@ -108,7 +112,14 @@ export class Player {
     CONTEXT.translate(this.position.x, this.position.y)
     CONTEXT.rotate(this.position.r)
 
-    const state = control.pick('ArrowUp') ? 'running' : 'waiting'
+    let state: PlayerKeyFrame
+
+    if (control.pick('ArrowLeft')) state = 'backFlip'
+    else if (control.pick('ArrowRight')) state = 'frontFlip'
+    else if (control.pick('ArrowUp')) state = 'running'
+    else state = 'waiting'
+
+    // const state = control.pick('ArrowUp') ? 'running' : 'waiting'
     const [currentFrame] = frame.pick(state)
     CONTEXT.drawImage(currentFrame, -SIZE, -SIZE, SIZE * 2, SIZE * 2)
     // CONTEXT.drawImage(this.img, -SIZE, -SIZE, SIZE * 2, SIZE * 2)

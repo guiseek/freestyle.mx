@@ -8,6 +8,8 @@ export const initialize = async () => {
   setCanvasSize()
 
   const player = new Player()
+  console.log(player);
+  
 
   return player
 }

@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-type PlayerKeyFrame = 'waiting' | 'running'
+type PlayerKeyFrame = 'waiting' | 'running' | 'backFlip' | 'frontFlip'
 
 type PlayerFrame = Record<PlayerKeyFrame, OffscreenCanvas[]>
 
