@@ -24,6 +24,8 @@ export class Player {
 
   img = new Image()
 
+  frame: PlayerKeyFrame = 'waiting'
+
   constructor() {
     this.img.src = 'rider.svg'
 
@@ -105,8 +107,9 @@ export class Player {
     CONTEXT.save()
     CONTEXT.translate(this.position.x, this.position.y)
     CONTEXT.rotate(this.position.r)
-    
-    const [currentFrame] = frame.pick('running')
+
+    const state = control.pick('ArrowUp') ? 'running' : 'waiting'
+    const [currentFrame] = frame.pick(state)
     CONTEXT.drawImage(currentFrame, -SIZE, -SIZE, SIZE * 2, SIZE * 2)
     // CONTEXT.drawImage(this.img, -SIZE, -SIZE, SIZE * 2, SIZE * 2)
 
