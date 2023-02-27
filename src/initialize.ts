@@ -1,5 +1,5 @@
 import {setCanvasSize} from './utilities'
-import {GameLoop, Player} from './domain'
+import {Player} from './domain'
 import {CANVAS} from './constants'
 
 export const initialize = async () => {
@@ -8,8 +8,6 @@ export const initialize = async () => {
   setCanvasSize()
 
   const player = new Player()
-  const gameLoop = new GameLoop(player)
-  gameLoop.execute()
 
   return player
 }
