@@ -23,3 +23,13 @@ interface State<T> {
   pick: <K extends keyof T>(key: K) => Readonly<T>[K]
   state: () => Readonly<T>
 }
+
+type OffscreenRenderingContext2 = OffscreenRenderingContext & {
+  drawImage(
+    image: CanvasImageSource,
+    dx: number,
+    dy: number,
+    dw: number,
+    dh: number
+  ): void
+}
