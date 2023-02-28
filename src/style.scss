@@ -12,8 +12,8 @@ body {
 main {
   .control {
     border-radius: 50%;
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     user-select: none;
     position: relative;
     background-color: #212121;
@@ -42,19 +42,53 @@ main {
     }
   }
 
+  .flex {
+    display: flex;
+    &.row {
+      flex-direction: row;
+      justify-content: space-between;
+
+      &.gap-16 {
+        column-gap: 16px;
+      }
+    }
+
+    &.col {
+      flex-direction: column;
+
+      &.gap-16 {
+        row-gap: 16px;
+      }
+    }
+  }
+
   #left,
   #right {
     bottom: 10px;
     position: fixed;
     display: flex;
     flex-direction: column;
-    row-gap: 20px;
+    row-gap: 16px;
   }
   #left {
     left: 20px;
+
+    button {
+      &:first-child {
+        width: 60px;
+        height: 60px;
+      }
+    }
   }
   #right {
     right: 20px;
+    button {
+      align-self: flex-end;
+      &:first-child {
+        width: 60px;
+        height: 60px;
+      }
+    }
   }
 }
 

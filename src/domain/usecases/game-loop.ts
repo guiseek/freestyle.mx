@@ -20,30 +20,16 @@ export class GameLoop {
 
     store.setState({t, speed})
 
-    /**
-     * Cor do céu
-     */
-    // CONTEXT.fillStyle = '#8ee5ff'
-    // CONTEXT.fillRect(0, 0, CANVAS.width, CANVAS.height)
     CONTEXT.drawImage(this.sky, 0, 0, CANVAS.width, CANVAS.height)
 
-    /**
-     * Cor da terra
-     */
     CONTEXT.fillStyle = '#764015'
-
     CONTEXT.beginPath()
     CONTEXT.moveTo(0, CANVAS.height)
-
-    
     for (let i = 0; i < CANVAS.width; i++) {
       CONTEXT.lineTo(i, CANVAS.height - noise(t + i) * 0.3)
     }
-
     CONTEXT.lineTo(CANVAS.width, CANVAS.height)
-
     CONTEXT.fill()
-
     this.player.draw()
     requestAnimationFrame(this.execute)
   }

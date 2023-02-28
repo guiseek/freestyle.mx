@@ -11,7 +11,7 @@ const clouds: [string, number, number][] = [
 
 export function createSky() {
   const offscreen = new Offscreen(CANVAS.width, CANVAS.height)
-  const {x, y} = new Vector2(CANVAS.width / 2, CANVAS.height / 2)
+  const {x} = new Vector2(CANVAS.width / 2, CANVAS.height / 2)
   const bg = offscreen.context.createLinearGradient(x, 0, x, CANVAS.height)
 
   bg.addColorStop(0, '#90caf9')
@@ -20,11 +20,16 @@ export function createSky() {
   offscreen.context.fillStyle = bg
   offscreen.context.fillRect(0, 0, CANVAS.width, CANVAS.height)
 
-  const r = between(0, clouds.length - 1)
-  const [src, width, height] = clouds[r]
-  loadImage(src, width, height).then((cloud) => {
-    const center = {x: x - width / r, y: y - height / r}
-    offscreen.context.drawImage(cloud, center.x, center.y, width, height)
+  const r = between(0, CANVAS.width)
+  clouds.forEach(async ([src, width, height], i) => {
+    await loadImage(src, width, height).then((cloud) => {
+      const center = {x: i * r - width / 1.2, y: i * r - height / 1.2}
+      offscreen.context.globalAlpha = 0.35
+      offscreen.context.globalCompositeOperation = 'difference'
+      offscreen.context.drawImage(cloud, center.x, center.y, width, height)
+      offscreen.context.globalCompositeOperation = 'lighter'
+      offscreen.context.drawImage(cloud, center.x, center.y, width, height)
+    })
   })
 
   return offscreen.canvas
