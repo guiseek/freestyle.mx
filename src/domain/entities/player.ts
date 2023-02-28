@@ -1,7 +1,7 @@
 import {CANVAS, CONTEXT, GRAVITY, SIZE} from '../../constants'
 import {loadFrames} from '../usecases/load-frames'
 import {GameLoop} from '../usecases/game-loop'
-import {control, frame, store, trick} from '../../data'
+import {control, frame, store} from '../../data'
 import {noise} from '../../utilities'
 
 const PLAYER_FRAMES: PlayerFrames = [
@@ -34,10 +34,10 @@ export class Player {
 
   img = new Image()
 
-  // state: PlayerKeyFrame = 'waiting'
-  // skipLoop = false
-  // frameIndex = 0
-  // skipTimes = 0
+  frame: PlayerKeyFrame = 'waiting'
+  skipLoop = false
+  frameIndex = 0
+  skipTimes = 0
 
   constructor() {
     this.img.src = 'rider.svg'
@@ -45,55 +45,6 @@ export class Player {
     Promise.allSettled(loadFrames(frame, PLAYER_FRAMES)).then(() => {
       const gameLoop = new GameLoop(this)
       gameLoop.execute()
-    })
-
-    this.updateFrame('waiting')
-
-    const stateByKey: Record<Key, PlayerKeyFrame> = {
-      h: 'hartAttack',
-      s: 'superMan',
-      ArrowLeft: 'backFlip',
-      ArrowRight: 'frontFlip',
-      ArrowUp: 'running',
-      ArrowDown: 'waiting',
-    }
-
-    control.onChange.subscribe((value) => {
-      console.log()
-
-      const [current] =
-        Object.entries(value).find(([key, value]) => value === 1) ?? []
-
-      if (current) this.updateFrame(stateByKey[current as Key])
-    })
-
-    frame
-      .select(({currentKey, currentIndex, frames, skipTimes}) => {
-        return {currentKey, currentIndex, frames, skipTimes}
-      })
-      .subscribe(console.log)
-    // const s$ = control.select(({s}) => s)
-    // s$.subscribe((state) => {
-    //   if (state) {
-    //     const currentKey = 'superMan'
-    //     const frames = frame.pick(currentKey)
-    //     frame.setState({
-    //       skipTimes: frames.length,
-    //       currentIndex: 0,
-    //       currentKey,
-    //       frames,
-    //     })
-    //   }
-    // })
-  }
-
-  updateFrame(currentKey: PlayerKeyFrame) {
-    const frames = frame.pick(currentKey)
-    frame.setState({
-      skipTimes: frames.length,
-      currentIndex: 0,
-      currentKey,
-      frames,
     })
   }
 
@@ -125,6 +76,7 @@ export class Player {
     const p1 = CANVAS.height - noise(t + this.position.x) * 0.3
     const p2 = CANVAS.height - noise(t + 5 + this.position.x) * 0.3
 
+    let state: PlayerKeyFrame
     let grounded = 0
 
     if (p1 - SIZE > this.position.y) {
@@ -132,7 +84,7 @@ export class Player {
       // console.log('VOANDO')
     } else {
       // this.skipLoop = true
-      // this.skipTimes = 3
+      this.skipTimes = 3
       // console.log('CHAO')
       this.speed.y -= this.position.y - (p1 - SIZE)
       this.position.y = p1 - SIZE
@@ -176,44 +128,46 @@ export class Player {
     CONTEXT.translate(this.position.x, this.position.y)
     CONTEXT.rotate(this.position.r)
 
-    let {frames, currentIndex, skipTimes} = frame.state()
-    const currentFrame = frames[currentIndex]
-    CONTEXT.drawImage(currentFrame, -SIZE, -SIZE, SIZE * 2, SIZE * 2)
-
-    if (skipTimes > 0) {
-      if (currentIndex < frames.length - 1) {
-        currentIndex++
-      }
-      skipTimes--
-    }
-    
-    if (!skipTimes) {
-      currentIndex = frames.length - 1
-    }
-    frame.setState({currentIndex, skipTimes})
-
-
-    // if (control.pick('s')) this.state = 'superMan'
-    // else if (control.pick('h')) {
-    //   if (this.state != 'hartAttack') {
-    //     this.frameIndex = 0
-    //     this.skipTimes = 5
-    //   }
-    //   this.state = 'hartAttack'
-    // } else if (control.pick('ArrowLeft')) {
-    //   this.state = 'backFlip'
-    // } else if (control.pick('ArrowRight')) this.state = 'frontFlip'
-    // else if (control.pick('ArrowUp')) this.state = 'running'
-    // else state = 'waiting'
+    if (control.pick('s')) state = 'superMan'
+    else if (control.pick('h')) {
+      state = 'hartAttack'
+      this.skipTimes = 5
+    } else if (control.pick('ArrowLeft')) state = 'backFlip'
+    else if (control.pick('ArrowRight')) state = 'frontFlip'
+    else if (control.pick('ArrowUp')) state = 'running'
+    else state = 'waiting'
     // if (this.skipTimes > 0) {
     //   state = 'landing'
     //   this.skipTimes--
     // }
 
-    // const [currentFrame] = frame.pick('running')
-    // const [currentFrame] = frame.pick(this.state)
-    // CONTEXT.drawImage(currentFrame, -SIZE, -SIZE, SIZE * 2, SIZE * 2)
-    // }
+    switch (state) {
+      case 'hartAttack': {
+        const frames = frame.pick(state)
+
+        if (this.frameIndex < frames.length - 1) {
+          this.frameIndex++
+        }
+
+        const currentFrame = frames[this.frameIndex]
+        CONTEXT.drawImage(currentFrame, -SIZE, -SIZE, SIZE * 2, SIZE * 2)
+
+        if (this.skipTimes > 0) {
+          console.log(this.skipTimes, this.frameIndex)
+          this.skipTimes = this.skipTimes - 1
+        }
+
+        if (!this.skipTimes) {
+          this.frameIndex = 0
+        }
+
+        break
+      }
+      default: {
+        const [currentFrame] = frame.pick(state)
+        CONTEXT.drawImage(currentFrame, -SIZE, -SIZE, SIZE * 2, SIZE * 2)
+      }
+    }
 
     CONTEXT.restore()
   }
