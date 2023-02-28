@@ -3,15 +3,15 @@ import {freeze} from './freeze'
 
 export const useState = <T extends object>(initialState: T) => {
   const _state = new BehaviorSubject(freeze(initialState))
-  const state$ = _state.asObservable()
+  const onChange = _state.asObservable()
   const state = () => _state.getValue()
   let lastValue = initialState
-  
+
   const pickLast = <K extends keyof T>(key: K) => lastValue[key]
   const pick = <K extends keyof T>(key: K) => _state.value[key]
 
   const select = <K>(mapFn: (state: T) => K) => {
-    return state$.pipe(
+    return onChange.pipe(
       map((state: T) => mapFn(state)),
       distinctUntilChanged()
     )
@@ -22,5 +22,5 @@ export const useState = <T extends object>(initialState: T) => {
     _state.next({..._state.value, ...newState})
   }
 
-  return {select, setState, pick, pickLast, state}
+  return {select, onChange, setState, pick, pickLast, state}
 }

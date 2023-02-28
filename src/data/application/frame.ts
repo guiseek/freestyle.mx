@@ -1,11 +1,22 @@
 import {useState} from '../../core'
 
-export const frame = useState<PlayerFrame>({
+interface FrameState extends PlayerFrame {
+  currentKey: PlayerKeyFrame
+  currentIndex: number
+  frames: PlayerFrame[PlayerKeyFrame]
+  skipTimes: number
+}
+
+export const frame = useState<FrameState>({
   waiting: [],
   running: [],
   backFlip: [],
   frontFlip: [],
   superMan: [],
   hartAttack: [],
-  landing: []
+  landing: [],
+  currentKey: 'waiting',
+  currentIndex: 0,
+  frames: [],
+  skipTimes: 0,
 })

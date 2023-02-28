@@ -1,5 +1,11 @@
 /// <reference types="vite/client" />
 
+type Binary = 0 | 1
+
+type Key = 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight' | 's' | 'h'
+
+type ControlKeys = Record<Key, Binary>
+
 type PlayerKeyFrame =
   | 'waiting'
   | 'landing'
