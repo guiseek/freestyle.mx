@@ -14,6 +14,7 @@ type PlayerKeyFrame =
   | 'frontFlip'
   | 'superMan'
   | 'hartAttack'
+  | 'tilt'
 
 type PlayerFrame = Record<
   PlayerKeyFrame,

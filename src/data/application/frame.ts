@@ -15,6 +15,7 @@ export const frame = useState<FrameState>({
   superMan: [],
   hartAttack: [],
   landing: [],
+  tilt: [],
   currentKey: 'waiting',
   currentIndex: 0,
   frames: [],

@@ -12,8 +12,9 @@ export class GameLoop {
     let t = store.pick('t')
     let speed = store.pick('speed')
 
-    speed -=
-      (speed - (control.pick('ArrowUp') - control.pick('ArrowDown'))) * 0.1
+    speed -= (speed - control.pick('ArrowUp')) * 0.1
+    // speed -=
+    //   (speed - (control.pick('ArrowUp') - control.pick('ArrowDown'))) * 0.1
 
     t += VELOCITY * speed
 
@@ -34,6 +35,7 @@ export class GameLoop {
     CONTEXT.beginPath()
     CONTEXT.moveTo(0, CANVAS.height)
 
+    
     for (let i = 0; i < CANVAS.width; i++) {
       CONTEXT.lineTo(i, CANVAS.height - noise(t + i) * 0.3)
     }

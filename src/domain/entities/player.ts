@@ -11,6 +11,7 @@ const PLAYER_FRAMES: PlayerFrames = [
   ['./player/back-flip.png', 'backFlip', 0],
   ['./player/front-flip.png', 'frontFlip', 0],
   ['./player/super-man.png', 'superMan', 0],
+  ['./player/tilt.png', 'tilt', 0],
   ['./player/hart-attack/1.png', 'hartAttack', 0],
   ['./player/hart-attack/2.png', 'hartAttack', 1],
   ['./player/hart-attack/3.png', 'hartAttack', 2],
@@ -129,6 +130,7 @@ export class Player {
     CONTEXT.rotate(this.position.r)
 
     if (control.pick('s')) state = 'superMan'
+    else if (control.pick('ArrowDown')) state = 'tilt'
     else if (control.pick('h')) {
       state = 'hartAttack'
       this.skipTimes = 5
@@ -153,13 +155,12 @@ export class Player {
         CONTEXT.drawImage(currentFrame, -SIZE, -SIZE, SIZE * 2, SIZE * 2)
 
         if (this.skipTimes > 0) {
-          console.log(this.skipTimes, this.frameIndex)
           this.skipTimes = this.skipTimes - 1
         }
 
-        if (!this.skipTimes) {
-          this.frameIndex = 0
-        }
+        // if (!this.skipTimes) {
+        //   this.frameIndex = 0
+        // }
 
         break
       }

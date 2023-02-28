@@ -10,6 +10,6 @@ while (perm.length < LEVEL) {
 }
 
 export const noise = (x: number) => {
-  x = (x * 0.005) % LEVEL
+  x = (x * 0.004) % LEVEL
   return lerp(perm[Math.floor(x)], perm[Math.ceil(x)], x - Math.floor(x))
 }
