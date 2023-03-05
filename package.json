@@ -1,11 +1,11 @@
 {
-  "name": "mx-vini",
+  "name": "freestyle.mx",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build --base mx-vini",
+    "build": "tsc && vite build --base freestyle.mx",
     "start": "vite preview"
   },
   "devDependencies": {
